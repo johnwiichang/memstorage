@@ -6,6 +6,8 @@ import (
 
 //Get 获取内存暂存中的对象
 func (mem *MemStorage) Get(key string) (interface{}, bool) {
+	mem.lock.Lock()
+	defer mem.lock.Unlock()
 	val, existed := mem.storage[key]
 	if existed {
 		return val.val, existed
@@ -21,6 +23,8 @@ func (mem *MemStorage) GetnRenew(key string, ttl time.Duration) (interface{}, bo
 
 //Fetch 获取内存暂存中的对象
 func (mem *MemStorage) Fetch(key string) interface{} {
+	mem.lock.Lock()
+	defer mem.lock.Unlock()
 	val, existed := mem.storage[key]
 	if existed {
 		return val.val
